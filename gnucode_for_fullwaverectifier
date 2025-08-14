@@ -1,0 +1,43 @@
+#Devrenin adı : Tam dalga doğrultma devresi
+#Tam dalga doğrultma devresinde  harcanılangücü bulmak
+# Kullanılacak malzemeler:
+#Gerilim kaynağı ( Sinüzoidal)
+#4 adet diyot
+#Bobin
+#Direnç
+
+VM = 62; # in V Gerilimin maksimum değeri V ile ifade ediliyor.
+f = 60; # in Hz  Gerilimin frekansı Hz ile ifade ediliyor.
+R = 17; # in Ohm Yük direnci ohm ile ifade ediliyor.
+L = 29d-3; # in H Bobin değeri 10 miliHenry olup,bu ifade için Henry birimi kullanılıyor.
+
+VO = (2*VM)/pi;  # Ortalama çıkış gerilimi ifadesi
+IO = VO /R; # Ortalama yük akımı ifadesi
+IRMS = IO^2; #IRMS ifadesi için ortalama yük akımı ifadesi ile başladı.
+IR = 0;
+a=2;#2. harmonikten başlayacaj
+while(a<30)#IRMS akımının belirlemek için n = 30 a kadar harmonik gerilimlerin alınacaktır.
+  VN = (2*VM)*((1/(a-1))-(1/(1+a)))*(1/pi); #Harmoniğin değerine göre gerilim değişecektir
+  XN = 1*(a)*(2)*(pi)*(f)*(L); #Empedansın sanal kısmı
+  XK = (XN^2) + (R^2);# Empendansın büyüklüğünü, reel kısmı ile sanal kısmı oluşturur.
+
+  XK = sqrt(XK); #Empedansın büyüklüğü
+
+  I1 = VN / XK;#Harmonik akımı oluyor
+
+  I1 = I1 / sqrt(2);# RMS değerine dönüştürülüyor maksimum bileşenden.
+  IR = IR + (I1^2);# Bütün harmoniklerin RMS değeri toplanıyor.
+  a = a + 2;# Döngü numarası artması için a değişkeni kullanılır. Harmonikler ikişer ikişer artmajtadır.
+endwhile
+
+IR = IRMS + IR; #Bütün harmoniklerin RMS değeri ve ek olarak DC bileşen eklenir.
+IR = sqrt(IR);
+
+P = IR*IR*R; # Harcanılan güç Watt ile ifade ediliyor.
+
+ISRMS = IR; # Kaynak akımı ifadesi.
+VSRMS = VM/sqrt(2); #Gerilim kaynağının maksimum değeri değişmeyeceğinden sabit alıyoruz.
+S = VSRMS*ISRMS # Görünür güç
+cosfi = P/S; #Güç faktörünün bulunması
+disp(cosfi);
+disp(P);
