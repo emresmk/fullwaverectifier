@@ -1,1 +1,1 @@
-Full wave rectifier with RL load is designed in Octave.
+Full wave rectifier with RL load is designed in Octave. 
